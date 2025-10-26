@@ -2,14 +2,14 @@
 # install.sh
 # Script principal para orquestrar a instalação
 
-set -e # Sai imediatamente se um comando falhar
+set -e
 
 echo "🚀 Iniciando a instalação do Developer Setup..."
 
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 FONTS_DIR="$PROJECT_DIR/fonts"
 SCRIPTS_DIR="$PROJECT_DIR/scripts"
-SYSTEM_DIR="$PROJECT_DIR/system" # Novo diretório
+SYSTEM_DIR="$PROJECT_DIR/system"
 
 # ==========================================================
 # 0. Instalação de Fontes
@@ -50,7 +50,7 @@ read -r -p "Deseja aplicar as modificações de UI do sistema (Ex: Tema Escuro, 
 if [[ "$CONFIRM_UI" =~ ^[Ss]$ ]]; then
     echo "Ajustes de UI serão aplicados. Verificando scripts em /system..."
     
-    # Executa todos os scripts no novo diretório /system
+    
     for script in "$SYSTEM_DIR"/*.sh; do
         if [ -f "$script" ]; then
             echo "  -> Executando $(basename "$script")..."
