@@ -1,31 +1,66 @@
 #!/bin/bash
 # install.sh
+# Script principal para orquestrar a instalação
 
-set -e
-echo " 🚀 Iniciando a instalação do RD Setup..."
+set -e # Sai imediatamente se um comando falhar
+
+echo "🚀 Iniciando a instalação do Developer Setup..."
 
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SCRIPTS_DIR="$PROJECT_DIR/scripts"
 FONTS_DIR="$PROJECT_DIR/fonts"
+SCRIPTS_DIR="$PROJECT_DIR/scripts"
+SYSTEM_DIR="$PROJECT_DIR/system" # Novo diretório
 
+# ==========================================================
+# 0. Instalação de Fontes
+# ==========================================================
 echo "🎨 Instalando fontes (Nerd Fonts)..."
 for script in "$FONTS_DIR"/*.sh; do
     echo "  -> Executando $(basename "$script")..."
     bash "$script"
 done
 
-echo "⚙️  Executando instalações essenciais..."
-for script in "$SCRIPTS_DIR"/common/*.sh; do 
-    echo " -> Executando $(basename "$script")..."
-    bash "$script"  
+# ==========================================================
+# 1. Instalação de Ferramentas Comuns
+# ==========================================================
+echo "⚙️  Executando instalações essenciais (Git, ASDF, Docker, etc)..."
+for script in "$SCRIPTS_DIR"/common/*.sh; do
+    echo "  -> Executando $(basename "$script")..."
+    bash "$script"
 done
 
-
-echo "🎨 Aplicando configurações..."
-for script in "$SCRIPTS_DIR"/configs/*.sh; do 
-    echo " -> Executando $(basename "$script")..."
-    bash "$script"  
+# ==========================================================
+# 2. Configurações de Aplicativos
+# ==========================================================
+echo "🔧 Aplicando configurações (Aliases, Temas do VSCode)..."
+for script in "$SCRIPTS_DIR"/configs/*.sh; do
+    echo "  -> Executando $(basename "$script")..."
+    bash "$script"
 done
 
+# ==========================================================
+# 3. Modificações de Sistema
+# ==========================================================
+echo ""
+echo "=========================================================="
+echo "❓❓ CONFIGURAÇÃO DA INTERFACE DO USUÁRIO (GNOME/Sistema) ❓❓"
+echo "----------------------------------------------------------"
+read -r -p "Deseja aplicar as modificações de UI do sistema (Ex: Tema Escuro, Dock, Atalhos)? (s/N): " CONFIRM_UI
+
+if [[ "$CONFIRM_UI" =~ ^[Ss]$ ]]; then
+    echo "Ajustes de UI serão aplicados. Verificando scripts em /system..."
+    
+    # Executa todos os scripts no novo diretório /system
+    for script in "$SYSTEM_DIR"/*.sh; do
+        if [ -f "$script" ]; then
+            echo "  -> Executando $(basename "$script")..."
+            bash "$script"
+        fi
+    done
+    echo "Configurações de UI concluídas."
+else
+    echo "Modificações de UI ignoradas."
+fi
+
+echo ""
 echo "✅ Instalação concluída com sucesso!"
-echo "Necessario fazer logout para aplicar todas as alteracoes"
