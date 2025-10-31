@@ -15,6 +15,7 @@ Configurações de UI (Opcional): Modificações na interface gráfica (GNOME) c
 📂 Estrutura do Projeto
 A lógica de automação está dividida em diretórios claros para facilitar a manutenção e a modularidade:
 
+```bash
 .
 ├── fonts/
 │   └── nerd_font.sh          # Instala fontes (Obrigatório, essencial para o terminal).
@@ -34,6 +35,8 @@ A lógica de automação está dividida em diretórios claros para facilitar a m
 └── system/                   # Configurações de UI e Shell (Opcional).
     ├── gnome.sh              # Aplica configurações do GNOME (Dock, Atalhos, Tema).
     └── starship.sh           # Instala e configura o Starship prompt.
+```
+
 🛠️ Guia de Uso
 1. Clonar o Repositório
 Abra seu terminal e clone o projeto (substitua pelo seu caminho real):
