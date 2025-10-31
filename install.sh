@@ -27,7 +27,7 @@ gum style \
     --border-foreground 8 \
     --border double \
     --padding "1 2" \
-    "🚀 Iniciando a instalação completa do Developer Setup (Omakub Clone)."
+    "🚀 Iniciando a instalação completa do DeveSetup"
 
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 FONTS_DIR="$PROJECT_DIR/fonts"
