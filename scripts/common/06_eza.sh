@@ -6,6 +6,6 @@ set -e
 echo "Instalando Eza (via repositório de terceiros)..."
 
 sudo apt update
-sudo apt install eza
+sudo apt install -y eza
 
 echo "Eza instalado com sucesso. Use o comando 'eza'."
