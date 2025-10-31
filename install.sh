@@ -22,6 +22,8 @@ sudo apt install -y --allow-downgrades "./$TEMP_FILE"
 gum log --level info "Removendo arquivo temporário..."
 rm "$TEMP_FILE"
 
+clear
+
 gum style \
     --foreground 8 \
     --border-foreground 8 \
@@ -62,8 +64,6 @@ run_interactive_selection() {
         gum log --level info "Nenhuma ferramenta selecionada. Pulando."
         return 0
     fi
-
-    echo "Sucesso"
     
     echo "$SELECTED_SCRIPTS" | while IFS= read -r script_name; do
             local script_path="$SCRIPT_DIR/$script_name"
@@ -73,6 +73,8 @@ run_interactive_selection() {
             gum spin --spinner dot -- bash "$script_path"
             
             ( gum log --level info "  -> $script_name concluído." )
+
+            sleep 2
         done
 }
 
