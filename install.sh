@@ -4,6 +4,19 @@
 
 set -e
 
+GUM_VERSION="0.17.0"
+TEMP_FILE="gum.deb"
+DOWNLOAD_URL="https://github.com/charmbracelet/gum/releases/download/v${GUM_VERSION}/gum_${GUM_VERSION}_amd64.deb"
+
+echo "Instalando Gum (versão $GUM_VERSION) para scripts interativos..."
+sudo apt update
+sudo apt install -y wget
+echo "Baixando pacote .deb do Gum..."
+wget -qO "$TEMP_FILE" "$DOWNLOAD_URL"
+sudo apt install -y --allow-downgrades "./$TEMP_FILE"
+echo "Removendo arquivo temporário..."
+rm "$TEMP_FILE"
+
 echo "🚀 Iniciando a instalação do Developer Setup..."
 
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
