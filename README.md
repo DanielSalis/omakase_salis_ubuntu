@@ -37,7 +37,7 @@ bash /caminho/general_omakase/scripts/common/05_vscode.sh
 | `scripts/configs/bash_aliases.sh` | Aliases para Eza no Bash; instale Eza antes |
 | `system/starship.sh` | Starship e inicialização no Bash |
 | `system/gnome.sh` | Tema escuro e dock, se Dash to Dock estiver disponível |
-| `system/custom_shortcuts.sh` | Atalhos de espaços de trabalho e terminais |
+| `system/custom_shortcuts.sh` | Quatro espaços de trabalho fixos e atalhos de espaços de trabalho e terminais |
 
 O Fedora usa pacotes nativos para as ferramentas comuns e os repositórios oficiais RPM da Microsoft e Docker. O Ubuntu usa os repositórios APT correspondentes. Downloads do Gum e Lazydocker contemplam x86_64 e aarch64. O ASDF mantém a versão do setup Ubuntu original.
 

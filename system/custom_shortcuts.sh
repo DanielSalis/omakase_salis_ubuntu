@@ -20,6 +20,10 @@ if gsettings writable org.gnome.shell.extensions.dash-to-dock hot-keys >/dev/nul
   gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 fi
 
+echo "Configuring four fixed workspaces..."
+gsettings set org.gnome.mutter dynamic-workspaces false
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 4
+
 echo "Configuring workspace shortcuts..."
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
