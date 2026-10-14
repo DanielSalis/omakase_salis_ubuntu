@@ -1,6 +1,9 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../scripts/lib" && pwd)/platform.sh"
+require_user
+require_gnome
 
-set -e
+set -euo pipefail
 
 echo "Disabling Super+number application launch shortcuts..."
 gsettings set org.gnome.shell.keybindings switch-to-application-1 "[]"

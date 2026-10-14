@@ -1,11 +1,11 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../lib" && pwd)/platform.sh"
+require_user
 # scripts/common/05_eza.sh
 
-set -e
 
-echo "Instalando Eza (via repositório de terceiros)..."
+echo "Instalando Eza ..."
 
-sudo apt update
-sudo apt install -y eza
+install_packages eza
 
 echo "Eza instalado com sucesso. Use o comando 'eza'."

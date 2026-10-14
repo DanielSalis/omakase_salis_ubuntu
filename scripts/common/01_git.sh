@@ -1,7 +1,8 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../lib" && pwd)/platform.sh"
+require_user
 # scripts/common/01_git.sh
 
 echo "Instalando Git..."
-sudo apt update
-sudo apt install -y git
+install_packages git
 echo "Git instalado."

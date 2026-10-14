@@ -1,11 +1,15 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../scripts/lib" && pwd)/platform.sh"
+require_user
 
-set -e
+set -euo pipefail
 
 echo "Instalando e configurando o Starship prompt..."
 
+install_packages curl
+
 echo "Baixando e executando o script de instalação do Starship..."
-curl -sS https://starship.rs/install.sh | sh -s -- -y
+curl -fsSL https://starship.rs/install.sh | sh -s -- -y
 
 # 2. Configuração no Bash
 echo "Configurando o Starship para ser carregado no ~/.bashrc..."

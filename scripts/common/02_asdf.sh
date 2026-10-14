@@ -1,8 +1,9 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../lib" && pwd)/platform.sh"
+require_user
 # scripts/common/00_asdf.sh
 # Instala e configura o gerenciador de versões asdf (via Git).
 
-set -e
 
 # Versão do ASDF para instalar (recomendado usar uma tag estável)
 ASDF_VERSION="v0.14.0" # Atualize conforme a necessidade
@@ -10,9 +11,11 @@ ASDF_VERSION="v0.14.0" # Atualize conforme a necessidade
 echo "Instalando ASDF Version Manager..."
 
 # 1. Instalação
-sudo apt update
-sudo apt install -y curl git build-essential libssl-dev zlib1g-dev \
-    libreadline-dev libsqlite3-dev libbz2-dev
+if [[ "$DISTRO" == ubuntu ]]; then
+    install_packages curl git build-essential libssl-dev zlib1g-dev libreadline-dev libsqlite3-dev libbz2-dev
+else
+    install_packages curl git gcc gcc-c++ make openssl-devel zlib-devel readline-devel sqlite-devel bzip2-devel
+fi
 
 # 2. Clona o repositório do ASDF
 ASDF_DIR="$HOME/.asdf"

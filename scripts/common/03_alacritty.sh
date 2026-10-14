@@ -1,14 +1,14 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../lib" && pwd)/platform.sh"
+require_user
 # scripts/common/02_alacritty.sh
 
-set -e
 
 FONT_NAME="FiraCode Nerd Font Mono"
 
 # 1. Instalação do Alacritty
 echo "Instalando Alacritty..."
-sudo apt update
-sudo apt install -y alacritty
+install_packages alacritty
 
 # 2. Configuração do Alacritty
 echo "Copiando configuração básica para ~/.config/alacritty/alacritty.toml"
@@ -43,7 +43,7 @@ background = '0x1e1e2e'
 foreground = '0xcdd6f4'
 
 # Opções de Shell
-[shell]
+[terminal.shell]
 program = "/bin/bash" # Pode ser alterado para /bin/zsh se você instalar
 args = ["-l"]
 EOL

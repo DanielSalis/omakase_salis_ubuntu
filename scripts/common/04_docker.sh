@@ -1,31 +1,34 @@
-#!/bin/bash
-# scripts/common/03_docker.sh
+#!/usr/bin/env bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../lib" && pwd)/platform.sh"
+require_user
 
-# Add the official Docker repo
-if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
-    [ -f /etc/apt/keyrings/docker.asc ] && sudo rm /etc/apt/keyrings/docker.asc
+install_packages curl
+if [[ "$DISTRO" == ubuntu ]]; then
     sudo install -m 0755 -d /etc/apt/keyrings
-    sudo wget -qO /etc/apt/keyrings/docker.asc https://download.docker.com/linux/ubuntu/gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc >/dev/null
     sudo chmod a+r /etc/apt/keyrings/docker.asc
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $VERSION_CODENAME stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+else
+    # Arquivo .repo funciona com DNF 4 e DNF 5.
+    curl -fsSL https://download.docker.com/linux/fedora/docker-ce.repo | sudo tee /etc/yum.repos.d/docker-ce.repo >/dev/null
 fi
+install_packages docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+sudo usermod -aG docker "$(id -un)"
+sudo mkdir -p /etc/docker
+if [[ ! -e /etc/docker/daemon.json ]]; then
+    echo '{"log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"5"}}' | sudo tee /etc/docker/daemon.json >/dev/null
+fi
+sudo systemctl enable --now docker
 
-# Install Docker engine and standard plugins
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
-
-# Give this user privileged Docker access
-sudo usermod -aG docker ${USER}
-
-# Limit log size to avoid running out of disk
-echo '{"log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"5"}}' | sudo tee /etc/docker/daemon.json
-
-
-# # 3. Instalação do Lazydocker
-cd /tmp
-LAZYDOCKER_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -sLo lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz"
-tar -xf lazydocker.tar.gz lazydocker
-sudo install lazydocker /usr/local/bin
-rm lazydocker.tar.gz lazydocker
-cd -
+temp_dir=$(mktemp -d)
+trap 'rm -rf "$temp_dir"' EXIT
+case "$(uname -m)" in
+    x86_64) arch=x86_64 ;;
+    aarch64) arch=arm64 ;;
+    *) echo "Lazydocker: arquitetura não suportada." >&2; exit 1 ;;
+esac
+install_packages python3
+version=$(curl -fsSL https://api.github.com/repos/jesseduffield/lazydocker/releases/latest | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"].removeprefix("v"))')
+curl -fsSL "https://github.com/jesseduffield/lazydocker/releases/download/v${version}/lazydocker_${version}_Linux_${arch}.tar.gz" -o "$temp_dir/lazydocker.tar.gz"
+tar -xzf "$temp_dir/lazydocker.tar.gz" -C "$temp_dir" lazydocker
+sudo install -m 755 "$temp_dir/lazydocker" /usr/local/bin/lazydocker

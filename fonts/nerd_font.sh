@@ -1,18 +1,20 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../scripts/lib" && pwd)/platform.sh"
+require_user
 
-set -e
+set -euo pipefail
 
 FONT_NAME="FiraCode"
 FONT_DIR="$HOME/.local/share/fonts"
-TEMP_DIR="/tmp/nerd-font-install"
+TEMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TEMP_DIR"' EXIT
 FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip"
 ZIP_FILE="$TEMP_DIR/$FONT_NAME.zip"
 
 echo "Instalando $FONT_NAME Nerd Font..."
 
 # 1. Instala utilitários necessários
-sudo apt update
-sudo apt install -y wget unzip
+install_packages wget unzip fontconfig
 
 # 2. Cria diretórios temporário e de destino
 mkdir -p "$TEMP_DIR"

@@ -1,8 +1,10 @@
 #!/bin/bash
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../lib" && pwd)/platform.sh"
+require_user
 # scripts/configs/00_bash_aliases.sh
 # Adiciona aliases personalizados do Eza ao ~/.bashrc
 
-set -e
+set -euo pipefail
 
 ALIAS_FILE="$HOME/.bashrc"
 
